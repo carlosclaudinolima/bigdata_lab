@@ -1,0 +1,33 @@
+CREATE EXTERNAL TABLE clientes (
+    id_cliente BIGINT,
+    mes BIGINT,
+    idade DOUBLE,
+    profissao STRING,
+    salario_anual DOUBLE,
+    num_contas DOUBLE,
+    num_cartoes DOUBLE,
+    juros_emprestimo DOUBLE,
+    num_emprestimos DOUBLE,
+    dias_atraso DOUBLE,
+    num_pagamentos_atrasados DOUBLE,
+    num_verificacoes_credito DOUBLE,
+    mix_credito STRING,
+    divida_total DOUBLE,
+    taxa_uso_credito DOUBLE,
+
+    idade_historico_credito DOUBLE,
+    investimento_mensal DOUBLE,
+    comportamento_pagamento STRING,
+    saldo_final_mes DOUBLE,
+    score_credito STRING,
+    emprestimo_carro BIGINT,
+    emprestimo_casa BIGINT,
+    emprestimo_pessoal BIGINT,
+    emprestimo_credito BIGINT,
+    emprestimo_estudantil BIGINT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/datalake/raw/clientes'
+TBLPROPERTIES ('skip.header.line.count'='1');

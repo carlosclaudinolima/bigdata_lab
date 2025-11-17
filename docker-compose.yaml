@@ -1,0 +1,280 @@
+#version: '3.8'
+
+# x-airflow-common: &airflow-common
+#   image: apache/airflow:2.5.0
+#   #user: "1000:1000"
+#   environment:
+#     AIRFLOW__CORE__EXECUTOR: LocalExecutor
+#     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+pymysql://root:fiapon@mysql/dbfiapon
+#     AIRFLOW__WEBSERVER__RBAC: "false"
+#     _AIRFLOW_DB_UPGRADE: 'true'
+#   volumes:
+#     - ./dags:/opt/airflow/dags
+#     - ./logs:/opt/airflow/logs
+#     - ./plugins:/opt/airflow/plugins
+#     - ./requirements.txt:/requirements.txt
+#   entrypoint: /bin/bash
+
+services:
+
+  # airflow-webserver:
+  #   <<: *airflow-common # <-- Usa a configuração comum
+  #   container_name: 'airflow-webserver'
+  #   ports:
+  #     - "8080:8080"
+  #   command: >
+  #     -c "pip install -r /requirements.txt &&  /entrypoint airflow users create --username admin --firstname Carlos \
+  #     --lastname Claudino --role Admin  --email carlosclaudinolima@gmail.com --password 123 && /entrypoint airflow webserver"
+  #   depends_on:
+  #   - mysql
+  #   - airflow-scheduler
+
+  # airflow-scheduler:
+  #   <<: *airflow-common # <-- Usa a configuração comum
+  #   container_name: 'airflow-scheduler'
+  #   command: >
+  #     -c "pip install -r /requirements.txt && /entrypoint airflow db init && /entrypoint airflow scheduler"
+  #   depends_on:
+  #   - mysql
+
+  mysql:
+    image: 'mysql:latest'
+    container_name: 'mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'fiapon'
+      MYSQL_DATABASE: 'dbfiapon'
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - hadoop_network
+
+  # --- HDFS ---
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    restart: always
+    ports:
+      - "9870:9870"   #Porta administrativa acessivel por HTTP
+      - "9000:9000"   #Porta do servidor RPC do HDFS
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    restart: always
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+    depends_on:
+      - namenode
+
+  # --- YARN ---
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    container_name: resourcemanager
+    restart: always
+    ports:
+      - "8088:8088"
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+    depends_on:
+      - namenode
+      - datanode
+
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    container_name: nodemanager
+    restart: always
+    environment:
+      YARN_CONF_yarn_resourcemanager_hostname: resourcemanager
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+    depends_on:
+      - namenode
+      - datanode
+      - resourcemanager
+
+
+  # --- HIVE SERVICES ---
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-server
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    volumes:
+      - ./hive-conf/hive-site.xml:/opt/hive/conf/hive-site.xml # Configurações mapeadas para o hive acessar o postgresql
+    environment:
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+    depends_on:
+      - hive-metastore
+
+  hive-metastore:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-metastore
+    restart: always
+    ports:
+      - "9083:9083" # Para o ambiente de denvolvimento funcionar fora do container
+    volumes:
+      - ./hive-conf/hive-site.xml:/opt/hive/conf/hive-site.xml # Configurações mapeadas para o hive acessar o postgresql
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 datanode:9864 hive-metastore-postgresql:5432"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - hadoop_network
+    depends_on:
+      - namenode
+      - datanode
+      - hive-metastore-postgresql
+    command: /opt/hive/bin/hive --service metastore
+
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+    container_name: hive-metastore-postgresql
+    restart: always
+    volumes:
+      - pg_metastore_data:/var/lib/postgresql/data
+    networks:
+      - hadoop_network
+
+  # --- SPARK SERVICES ---
+  spark-master:
+    image: bde2020/spark-master:2.4.5-hadoop2.7
+    #image: bde2020/spark-master:3.3.0-hadoop3.3
+    container_name: spark-master
+    restart: always
+    ports:
+      - "8081:8080"  # Interface Web do Spark Master (usando 8081 para não conflitar com Airflow)
+      - "7077:7077"  # Porta de serviço do Spark Master
+    volumes:
+      - ./jobs:/opt/spark/jobs # Pasta para colocar seus scripts/jars
+      - ./hive-conf/hive-site.xml:/spark/conf/hive-site.xml # Para o spark saber onde está o hive (hive.metastore.uris)
+      - ./hbase-conf/hbase-site.xml:/spark/conf/hbase-site.xml
+    networks:
+      - hadoop_network
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - PYSPARK_PYTHON=python3
+    env_file:
+      - ./hadoop.env
+    depends_on:
+      - namenode
+      - datanode
+
+  spark-worker:
+    image: bde2020/spark-worker:2.4.5-hadoop2.7
+    #image: bde2020/spark-worker:3.3.0-hadoop3.3
+    container_name: spark-worker
+    restart: always
+    volumes:
+      - ./hive-conf/hive-site.xml:/spark/conf/hive-site.xml # Para o spark saber onde está o hive (hive.metastore.uris)
+      - ./hbase-conf/hbase-site.xml:/spark/conf/hbase-site.xml
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - PYSPARK_PYTHON=python3
+    networks:
+      - hadoop_network
+    depends_on:
+      - spark-master  
+
+  # --- HBASE SERVICES ---
+  zookeeper:
+    image: bde2020/zookeeper
+    container_name: zookeeper
+    restart: always
+    volumes:
+      - ./zoo-conf/zoo.cfg:/config/zoo.cfg
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181              # Configuração de ambiente Obrigatória - Porta para os clientes conectarem
+      - ZOOKEEPER_SERVER_ID=1                   # Configuração de ambiente Obrigatória - Identificador do Nó
+      - ZOOKEEPER_SERVERS=zookeeper:2888:3888   # Configuração de ambiente Obrigatória - Portas para comunucação interna : eleição de líder
+    networks:
+      - hadoop_network
+    command: /app/bin/zkServer.sh start-foreground
+
+  hbase-master:
+    image: thedarklordottm/hbase-phoenix-master:1.0
+    # build: 
+    #   context: ./hbase-phoenix
+    #   args:
+    #     HBASE_IMAGE: bde2020/hbase-master:latest
+    container_name: hbase-master
+    hostname: hbase-master # Para evitar crise de identidade entre o master e o region-server, forçando o host ser o nome do container
+    restart: always
+    ports:
+      - "16010:16010" # UI do HBase Master
+    networks:
+      - hadoop_network
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 datanode:9864 zookeeper:2181"
+      HBASE_CONF_hbase_cluster_distributed: "true" # Se não colocar essa config ele roda standalone e o regionserver não entra 
+      HBASE_CONF_hbase_zookeeper_quorum: "zookeeper" # Para o hbase não procurar o zookeeper no localhost
+      HBASE_CONF_hbase_rootdir: "hdfs://namenode:9000/hbase" # Para o hbase saber onde colocar os descritores
+      HBASE_CLASSPATH: "/opt/phoenix/phoenix-4.14.1-HBase-1.2-server.jar" # para achar o jar
+    depends_on:
+      - namenode
+      - datanode
+      - zookeeper    
+
+  hbase-regionserver:
+    image: thedarklordottm/hbase-phoenix-regionserver:1.0
+    # build: 
+    #   context: ./hbase-phoenix
+    #   args:
+    #     HBASE_IMAGE: bde2020/hbase-regionserver:latest
+    container_name: hbase-regionserver
+    hostname: hbase-regionserver # Para evitar crise de identidade entre o master e o region-server, forçando o host ser o nome do container
+    restart: always
+    ports:
+      - "16030:16030" # UI do HBase RegionServer
+    networks:
+      - hadoop_network
+    environment:
+      SERVICE_PRECONDITION: "hbase-master:16010" # Se não colocar essa config ele roda standalone e o regionserver não entra 
+      HBASE_CONF_hbase_cluster_distributed: "true"
+      HBASE_CONF_hbase_zookeeper_quorum: "zookeeper" # Para o hbase não procurar o zookeeper no localhost
+      HBASE_CONF_hbase_regionserver_hostname: "hbase-regionserver" # Força a chamar pelo nome certo
+      HBASE_CONF_hbase_rootdir: "hdfs://namenode:9000/hbase" # Para o hbase saber onde colocar os descritores
+      HBASE_CLASSPATH: "/opt/phoenix/phoenix-4.14.1-HBase-1.2-server.jar"
+    depends_on:
+      - hbase-master
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  pg_metastore_data:
+  mysql_data:
+networks:
+  hadoop_network:
+
+  # https://hub.docker.com/r/gradiant/hbase-region
+  # https://hub.docker.com/r/elek/hbase-regionserver

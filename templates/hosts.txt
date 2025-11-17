@@ -1,0 +1,11 @@
+# Mapeamento para o cluster Hadoop Docker
+127.0.0.1   namenode
+127.0.0.1   datanode
+127.0.0.1   resourcemanager
+127.0.0.1   nodemanager
+127.0.0.1   hive-server
+127.0.0.1   hive-metastore
+127.0.0.1   hive-metastore-postgresql
+127.0.0.1   spark-master
+127.0.0.1   spark-worker
+127.0.0.1   mysql

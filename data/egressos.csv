@@ -1,0 +1,203 @@
+Nome,Profissão,Anos Reclusão,Data liberdade,Anos sem trabalho na profissão
+João Silva,Auxiliar de Logística,8,2025-01-15,9
+Carlos Santos,Operador de Caixa,5,2024-03-22,5
+Ana Oliveira,Atendente de Telemarketing,3,2023-11-10,4
+Pedro Souza,motorista de entrega,7,2024-08-01,9
+Mariana Ferreira,Auxiliar Administrativo,10,2025-05-30,11
+Bruno Alves,Estoquista,4,2023-07-19,4
+Juliana Gomes,Porteiro,6,2024-02-28,8
+Rafael Lima,Recepcionista,2,2025-09-05,2
+Fernanda Costa,Vendedor de Loja,5,2024-10-11,6
+Lucas Martins,Auxiliar de Produção,9,2023-04-14,9
+Daniel Carvalho,Cobrador de Ônibus,11,2025-08-20,13
+Gabriela Melo,Operador de Empilhadeira,7,2024-01-09,7
+Thiago Barbosa,Cozinheiro,5,2023-12-01,5
+Beatriz Nunes,Garçom,3,2024-06-18,4
+Felipe Mendes,Pedreiro,12,2025-03-03,12
+Larissa Araújo,Eletricista,6,2024-11-25,7
+Gustavo Ribeiro,Técnico de Manutenção,8,2023-09-08,10
+Camila Almeida,Segurança,10,,11
+Mateus Pereira,Motoboy,4,2025-02-17,4
+Vitória Rodrigues,Repositor de Mercadorias,5,2024-04-05,6
+Ricardo Sousa,Auxiliar de limpeza,3,2023-10-30,3
+Patrícia Barros,Jardineiro,6,2024-07-22,6
+Marcos Andrade,Pintor,7,2025-07-14,8
+Isabela Fernandes,Bombeiro Hidráulico,9,2024-09-16,9
+Leandro Castro,,2,2023-05-21,3
+Letícia Moreira,Auxiliar de Logística,5,2024-12-08,5
+Rodrigo Pinto,operador de caixa,4,2025-06-25,6
+Sofia Azevedo,Atendente de Telemarketing,6,2023-08-03,7
+José da Costa,Motorista de Entrega,8,2024-03-12,8
+Antônio Morais,AUXILIAR ADMINISTRATIVO,10,2025-10-01,10
+Francisco Dias,Estoquista,3,2024-05-19,4
+Luiza Siqueira,Porteiro,5,2023-02-11,5
+Sérgio Nogueira,Recepcionista,7,2024-11-07,8
+Aline Teixeira,Vendedor de Loja,9,2025-04-02,9
+Diego Matos,Auxiliar de Produção,4,2024-01-26,4
+Carla Bernardes,Cobrador de Ônibus,11,2023-06-30,12
+Renan Freitas,Operador de Empilhadeira,6,2024-08-15,6
+Tatiane Correia,Cozinheiro,8,2025-09-19,9
+Fábio Justino,Garçom,2,2023-03-05,2
+Manuela Dantas,Pedreiro,13,2024-10-23,13
+Vinícius Tavares,Eletricista,5,2025-01-01,6
+Clara Vasconcelos,Técnico de manutenção,7,2024-02-14,7
+Alexandre Bastos,SEGURANÇA,9,2023-07-07,10
+Eduardo Machado,Motoboy,4,,5
+Rebeca Monteiro,Repositor de Mercadorias,6,2025-03-29,6
+Anderson Neves,Auxiliar de limpeza,3,2024-06-09,3
+Elisa Peixoto,Jardineiro,7,2023-01-28,8
+Paulo Fogaça,Pintor,8,2024-09-03,8
+Vanessa Guerra,Bombeiro Hidráulico,10,2025-05-12,11
+Caio Esteves,Auxiliar de Logística,5,2023-11-17,5
+Helena Drummond,Operador de Caixa,4,2024-07-01,6
+Enzo Campos,Atendente de Telemarketing,6,2025-02-09,6
+Davi Xavier,Motorista de Entrega,8,2024-04-20,9
+Miguel Arruda,Auxiliar Administrativo,9,2023-10-02,9
+Laura Cardeal,Estoquista,3,2024-12-29,4
+Arthur Viana,Porteiro,5,,7
+Júlia Brandão,Recepcionista,7,2025-07-28,7
+Heitor Simões,Vendedor de Loja,10,2024-03-25,10
+Alice Pires,Auxiliar de Produção,4,2023-08-27,5
+Bernardo Valente,Cobrador de Ônibus,12,2025-04-18,12
+Valentina Quintanilha,Operador de Empilhadeira,6,2024-01-17,7
+Dante Moreira,Cozinheiro,8,2023-05-10,8
+Heloísa Guerra,Garçom,3,2024-10-06,3
+Theo Rangel,Pedreiro,14,2025-08-08,15
+Cecília Franco,Eletricista,5,2024-05-27,5
+Samuel Uchoa,Técnico de Manutenção,7,2023-12-25,8
+Lívia Castelo,Segurança,9,2024-11-13,9
+Benício Queiroz,Motoboy,4,2025-06-11,4
+Sophia Tavares,Repositor de Mercadorias,6,2024-02-02,7
+Isaac Veloso,Auxiliar de limpeza,3,2023-09-23,3
+Melissa Rabelo,Jardineiro,7,2025-01-29,8
+Pietro Novais,Pintor,8,2024-07-16,8
+Manuela Veiga,Bombeiro Hidráulico,11,2023-04-27,11
+Augusto Paes,Auxiliar de Logística,5,2024-12-20,6
+Emanuelly Trindade,,6,2025-05-05,6
+Benjamin Saboia,Atendente de Telemarketing,8,2024-03-01,9
+Guilherme Noronha,Motorista de Entrega,9,2023-10-21,9
+Luiza Caldeira,Auxiliar Administrativo,4,2024-08-30,4
+Nicolas Mourão,Estoquista,5,2025-01-12,5
+Yasmin Bulhões,Porteiro,7,2024-06-14,8
+Joaquim Saraiva,Recepcionista,10,2023-02-24,10
+Isabella Pimenta,Vendedor de Loja,4,2024-11-20,5
+Vicente Lemos,Auxiliar de Produção,6,2025-07-07,6
+Maitê Galvão,Cobrador de Ônibus,12,2024-04-10,13
+Anthony Zagury,Operador de Empilhadeira,8,2023-10-14,8
+Maria Alice Bastos,Cozinheiro,3,2024-09-28,3
+Noah Guedes,Garçom,5,2025-03-18,6
+Ravi Salgado,Pedreiro,15,2024-05-04,15
+Maria Cecília Fontes,Eletricista,6,2023-12-11,7
+João Miguel Pina,Técnico de Manutenção,8,2024-07-31,8
+Maria Clara Lobato,Segurança,10,2025-02-23,10
+Ryan Quadros,Motoboy,4,2024-01-03,5
+Maria Julia Lira,Repositor de Mercadorias,7,2023-08-11,7
+Bryan Valadares,Auxiliar de limpeza,3,2024-10-18,3
+Maria Luiza Muniz,Jardineiro,7,2025-06-03,8
+Lorenzo Barreto,Pintor,9,2024-02-19,9
+Maria Helena Dutra,Bombeiro Hidráulico,11,2023-07-27,12
+Esther Bezerra,Auxiliar de Logística,5,2024-09-11,5
+Pedro Lucas Chaves,Operador de Caixa,4,2025-04-25,4
+Mariana Guedes,Atendente de Telemarketing,6,2024-01-22,7
+João Pedro Távora,motorista de entrega,8,2023-09-14,8
+Maria Eduarda Bicalho,Auxiliar Administrativo,10,2024-08-08,11
+Erick Cordeiro,Estoquista,3,2025-03-09,3
+Isadora Pimentel,Porteiro,5,2024-05-15,5
+Enzo Gabriel Farias,Recepcionista,7,2023-11-28,8
+Ana Clara Gusmão,Vendedor de Loja,9,2024-12-03,9
+Davi Lucca Guimarães,Auxiliar de Produção,5,2025-07-21,6
+Ana Júlia Alencar,Cobrador de Ônibus,13,2024-04-29,13
+João Guilherme Maciel,Operador de Empilhadeira,8,2023-11-05,9
+Ana Luiza Diniz,Cozinheiro,3,2024-09-21,3
+Lucca Gusmão,Garçom,5,2025-01-06,6
+Breno Silveira,Pedreiro,15,,16
+Maria Vitória Gurgel,Eletricista,6,2024-08-22,6
+Otávio Jucá,Técnico de Manutenção,8,2023-03-16,9
+Raul Aragão,Segurança,10,2024-10-29,10
+Calebe Castilho,Motoboy,4,2025-05-25,4
+José Silva,Repositor de Mercadorias,7,2024-02-08,8
+Antônio Santos,Auxiliar de limpeza,3,2023-10-09,3
+Francisco Oliveira,Jardineiro,7,2024-12-16,7
+Carlos Souza,Pintor,9,2025-08-14,10
+Paulo Rodrigues,Bombeiro Hidráulico,11,2024-05-09,11
+Lucas Ferreira,Auxiliar de Logística,6,2023-12-06,7
+Luiz Alves,Operador de Caixa,4,2024-11-01,4
+Marcos Pereira,,7,2025-06-20,7
+Felipe Lima,Atendente de Telemarketing,8,2024-03-08,9
+Bruno Gomes,Motorista de Entrega,10,2023-10-28,10
+Rafael Costa,auxiliar administrativo,3,2024-08-12,3
+Daniel Ribeiro,Estoquista,5,2025-02-04,5
+Gabriel Martins,Porteiro,7,2024-06-29,8
+Ricardo Carvalho,Recepcionista,9,2023-01-07,9
+Leandro Almeida,Vendedor de Loja,5,2024-12-11,6
+Sérgio Melo,Auxiliar de Produção,6,2025-07-11,6
+Thiago Barbosa,Cobrador de Ônibus,13,2024-04-03,14
+André Nunes,Operador de Empilhadeira,8,2023-11-23,8
+Fábio Mendes,Cozinheiro,3,2024-09-06,3
+Alexandre Araújo,Garçom,5,2025-03-25,6
+Eduardo Castro,Pedreiro,14,2024-05-31,14
+Renan Moreira,Eletricista,6,2023-12-28,7
+Anderson Pinto,Técnico de Manutenção,8,2024-07-25,8
+Paulo Fogaça,Seguranca,10,2025-02-13,10
+Diego Matos,Motoboy,4,2024-01-30,5
+Caio Esteves,Repositor de Mercadorias,7,2023-08-20,7
+Enzo Campos,Auxiliar de limpeza,4,2024-10-26,4
+Davi Xavier,Jardineiro,7,2025-06-16,8
+Miguel Arruda,Pintor,9,2024-02-25,9
+Arthur Viana,Bombeiro Hidráulico,11,2023-07-19,12
+Heitor Simões,Auxiliar de Logística,6,2024-09-26,6
+Bernardo Valente,Operador de Caixa,4,2025-04-13,4
+Dante Moreira,Atendente de Telemarketing,7,2024-01-12,8
+Theo Rangel,Motorista de Entrega,8,2023-09-06,8
+Samuel Uchoa,Auxiliar Administrativo,10,2024-08-18,11
+Benício Queiroz,Estoquista,3,2025-03-31,3
+Isaac Veloso,Porteiro,5,2024-05-23,5
+Pietro Novais,Recepcionista,7,2023-12-19,8
+Augusto Paes,Vendedor de Loja,9,2024-12-24,9
+Emanuelly Trindade,Auxiliar de Produção,5,2025-07-02,6
+Benjamin Saboia,Cobrador de Ônibus,13,2024-04-16,13
+Guilherme Noronha,Operador de Empilhadeira,8,,10
+Nicolas Mourão,Cozinheiro,3,2024-09-13,3
+Joaquim Saraiva,Garçom,5,2025-01-24,6
+Vicente Lemos,Pedreiro,14,2024-06-06,14
+Maitê Galvão,Eletricista,6,2023-01-14,7
+Anthony Zagury,Técnico de Manutenção,8,2024-08-28,8
+Noah Guedes,Segurança,10,2025-04-21,10
+Ravi Salgado,Motoboy,4,2024-01-20,5
+João Miguel Pina,Repositor de Mercadorias,7,2023-08-01,7
+Ryan Quadros,Auxiliar de limpeza,4,2024-11-09,4
+Bryan Valadares,Jardineiro,7,2025-06-08,8
+Lorenzo Barreto,Pintor,9,2024-02-12,9
+Pedro Lucas Chaves,Bombeiro Hidráulico,12,2023-07-02,12
+Erick Cordeiro,Auxiliar de Logística,6,2024-09-01,6
+Enzo Gabriel Farias,Operador de Caixa,4,2025-04-08,4
+Davi Lucca Guimarães,Atendente de Telemarketing,7,2024-01-31,8
+João Guilherme Maciel,,8,2023-09-29,8
+Lucca Gusmão,Auxiliar Administrativo,10,2024-08-03,11
+Breno Silveira,Estoquista,3,2025-03-01,3
+Otávio Jucá,Porteiro,5,2024-05-06,5
+Raul Aragão,Recepcionista,7,2023-12-22,8
+Calebe Castilho,VENDEDOR DE LOJA,9,2024-12-09,9
+José Silva,Auxiliar de Produção,5,2025-07-30,6
+Antônio Santos,Cobrador de Ônibus,13,2024-04-23,13
+Francisco Oliveira,Operador de Empilhadeira,8,2023-11-13,9
+Carlos Souza,Cozinheiro,3,2024-09-30,3
+Paulo Rodrigues,Garçom,6,2025-01-19,6
+Lucas Ferreira,Pedreiro,14,2024-06-22,14
+Luiz Alves,Eletricista,6,2023-01-02,7
+Marcos Pereira,Técnico de Manutenção,8,2024-08-16,8
+Felipe Lima,Segurança,11,2025-04-28,11
+Bruno Gomes,Motoboy,4,2024-01-08,5
+Rafael Costa,Repositor de Mercadorias,7,2023-08-30,7
+Daniel Ribeiro,Auxiliar de limpeza,4,2024-11-15,4
+Gabriel Martins,Jardineiro,7,2025-06-27,8
+Ricardo Carvalho,Pintor,9,2024-02-05,9
+Leandro Almeida,Bombeiro Hidráulico,12,2023-07-13,12
+Sérgio Melo,Auxiliar de Logística,6,2024-10-03,6
+Thiago Barbosa,Operador de Caixa,4,2025-05-18,4
+André Nunes,Atendente de Telemarketing,7,2024-01-05,8
+Fábio Mendes,Motorista de Entrega,9,2023-10-18,9
+Alexandre Araújo,auxiliar administrativo,10,2024-08-25,11
+Eduardo Castro,Estoquista,3,2025-03-22,3
+Renan Moreira,Porteiro,5,2024-06-01,5
+Anderson Neves,Recepcionista,7,2023-02-17,8
