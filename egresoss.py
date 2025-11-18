@@ -1,9 +1,12 @@
 from hdfs import InsecureClient
 import pandas as pd
 import io
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 client = InsecureClient('http://localhost:9870', user='root')
+
+print(client.list('/'))
 
 # Caminho do arquivo no HDFS
 file_path = '/datalake/raw/egressos/egressos.csv'
@@ -30,7 +33,7 @@ df['Profissão'].unique()
 """
 
 df_cleaned = df.dropna()
-display(df_cleaned.head())
+print(df_cleaned.head())
 
 """## Renomeando colunas"""
 
@@ -39,7 +42,7 @@ df_cleaned.rename(columns={'Nome':'nome', 'Profissão': 'profissao', 'Data liber
 """ ## Convertendo campo"""
 
 df_cleaned.loc[:, 'dt_liberdade'] = pd.to_datetime(df_cleaned['dt_liberdade'])
-display(df_cleaned.head())
+print(df_cleaned.head())
 
 """## Normalizando Profissão"""
 
@@ -58,14 +61,12 @@ def normnalizar_texto(texto: str):
            .lower().lstrip().rstrip()
 
 df_cleaned.loc[:, 'profissao'] = df_cleaned.loc[:, 'profissao'].apply(normnalizar_texto)
-display(df_cleaned.head())
+print(df_cleaned.head())
 
 """#3. Estatística Descritiva"""
 
 df_cleaned.describe()
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 plt.figure(figsize=(10, 6))
 sns.histplot(df_cleaned['anos_reclusao'], color='blue', label='Anos Reclusão', kde=True, alpha=0.5)
@@ -82,8 +83,6 @@ plt.show()
 correlation = df_cleaned['anos_reclusao'].corr(df_cleaned['anos_fora_oficio'])
 print(f"A correlação entre 'Anos Reclusão' e 'Anos sem trabalho na profissão' é: {correlation:.2f}")
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 plt.figure(figsize=(10, 6))
 sns.scatterplot(x='anos_reclusao', y='anos_fora_oficio', data=df_cleaned, s=100, alpha=0.7)
