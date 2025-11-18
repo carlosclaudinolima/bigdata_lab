@@ -35,7 +35,7 @@ A arquitetura implementada segue o padrão de um Data Lake moderno, com camadas 
 | **Coordenação** | Apache ZooKeeper | ✅ **Implementado** |
 | **Banco NoSQL (Serving Layer)**| Apache HBase (Master, RegionServer) | ✅ **Implementado** |
 | **Camada SQL para NoSQL** | Apache Phoenix (embutido no HBase) | ✅ **Implementado** |
-| **Orquestração de Pipeline** | Apache Airflow + MySQL | ✅ **Implementados** |
+| **Orquestração de Pipeline** | Apache Airflow + MySQL | ✅ **Implementado** |
 | **Visualização de Dados (BI)**| Apache Superset | ✅ **Implementado** |
 | **Automação de Workflow** | n8n | ✅ **Implementado** |
 

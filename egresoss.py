@@ -6,8 +6,6 @@ import seaborn as sns
 
 client = InsecureClient('http://localhost:9870', user='root')
 
-print(client.list('/'))
-
 # Caminho do arquivo no HDFS
 file_path = '/datalake/raw/egressos/egressos.csv'
 

@@ -1,2 +1,6 @@
-PyMySql
+pandas
+matplotlib
+requests
+seaborn
+notebook
 hdfs
