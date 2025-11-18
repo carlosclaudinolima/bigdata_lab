@@ -1,41 +1,41 @@
-#version: '3.8'
 
-# x-airflow-common: &airflow-common
-#   image: apache/airflow:2.5.0
-#   #user: "1000:1000"
-#   environment:
-#     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-#     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+pymysql://root:fiapon@mysql/dbfiapon
-#     AIRFLOW__WEBSERVER__RBAC: "false"
-#     _AIRFLOW_DB_UPGRADE: 'true'
-#   volumes:
-#     - ./dags:/opt/airflow/dags
-#     - ./logs:/opt/airflow/logs
-#     - ./plugins:/opt/airflow/plugins
-#     - ./requirements.txt:/requirements.txt
-#   entrypoint: /bin/bash
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.5.0
+  #user: "1000:1000"
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+pymysql://root:fiapon@mysql/dbfiapon
+    AIRFLOW__WEBSERVER__RBAC: "false"
+    _AIRFLOW_DB_UPGRADE: 'true'
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+    - ./requirements.txt:/requirements.txt
+  entrypoint: /bin/bash
 
 services:
 
-  # airflow-webserver:
-  #   <<: *airflow-common # <-- Usa a configuração comum
-  #   container_name: 'airflow-webserver'
-  #   ports:
-  #     - "8080:8080"
-  #   command: >
-  #     -c "pip install -r /requirements.txt &&  /entrypoint airflow users create --username admin --firstname Carlos \
-  #     --lastname Claudino --role Admin  --email carlosclaudinolima@gmail.com --password 123 && /entrypoint airflow webserver"
-  #   depends_on:
-  #   - mysql
-  #   - airflow-scheduler
+  airflow-webserver:
+    <<: *airflow-common # <-- Usa a configuração comum
+    container_name: 'airflow-webserver'
+    ports:
+      - "8080:8080"
+    command: >
+      -c "pip install -r /requirements.txt &&  /entrypoint airflow users create --username admin --firstname Carlos \
+      --lastname Claudino --role Admin  --email carlosclaudinolima@gmail.com --password 123 && /entrypoint airflow webserver"
+    depends_on:
+    - mysql
+    - airflow-scheduler
 
-  # airflow-scheduler:
-  #   <<: *airflow-common # <-- Usa a configuração comum
-  #   container_name: 'airflow-scheduler'
-  #   command: >
-  #     -c "pip install -r /requirements.txt && /entrypoint airflow db init && /entrypoint airflow scheduler"
-  #   depends_on:
-  #   - mysql
+  airflow-scheduler:
+    <<: *airflow-common # <-- Usa a configuração comum
+    container_name: 'airflow-scheduler'
+    command: >
+      -c "pip install -r /requirements.txt && /entrypoint airflow db init && /entrypoint airflow scheduler"
+    depends_on:
+    - mysql
 
   mysql:
     image: 'mysql:latest'
@@ -60,6 +60,7 @@ services:
       - "9000:9000"   #Porta do servidor RPC do HDFS
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
+      - ./data:/opt/hadoop/data_local
     environment:
       - CLUSTER_NAME=test
     env_file:
@@ -70,7 +71,12 @@ services:
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode
+    hostname: datanode
     restart: always
+    ports: 
+      # importante para os clients fora da rede dos containers      
+      - "9864:9864" # Porta WebHDFS do DataNode (Crucial para o Python/Navegador)
+      - "9866:9866" # Porta de Transferência de Dados
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
     environment:
@@ -267,14 +273,98 @@ services:
       HBASE_CLASSPATH: "/opt/phoenix/phoenix-4.14.1-HBase-1.2-server.jar"
     depends_on:
       - hbase-master
+  
+
+  # ------------------------------------------------------------------
+  # CAMADA DE AUTOMAÇÃO DE WORKFLOW
+  # ------------------------------------------------------------------
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - hadoop_network
+    environment:
+      # Define o fuso horário para o n8n usar nos agendamentos
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+
+# ------------------------------------------------------------------
+  # CAMADA DE VISUALIZAÇÃO DE DADOS (BI)
+  # ------------------------------------------------------------------
+  superset-db:
+    image: postgres:14
+    container_name: superset-db
+    restart: always
+    environment:
+      - POSTGRES_DB=superset
+      - POSTGRES_USER=superset
+      - POSTGRES_PASSWORD=superset
+    ports:
+      - "5432:5432"
+    volumes:
+      - superset_db_data:/var/lib/postgresql/data
+    networks:
+      - hadoop_network
+
+  superset-redis:
+    image: redis:7
+    container_name: superset-redis
+    restart: always
+    volumes:
+      - superset_redis_data:/data
+    networks:
+      - hadoop_network
+
+  superset:
+    image: thedarklordottm/superset:latest
+    # docker-compose run --rm superset /app/docker/docker-init.sh não está sendo necessário pois o db já é criado, mas
+    # tem que rodar estes comandos antes de iniciar o container, com o superset-db e o superset-redis iniciados
+    # já que o  superset só cria as tabelas, mas não popula e nem cria o usuário e suas permissoes:
+    # superset db upgrade
+    # superset fab create-admin
+    # superset init
+    container_name: superset
+    # build: 
+    #   context: ./superset-psycopg
+    #   args:
+    #     SUPERSET_IMAGE: apache/superset:latest    
+    restart: always
+    ports:
+      # A porta interna do Superset é 8088, mas já está em uso pelo YARN.
+      # Mapeamos para a porta 8090 na nossa máquina.
+      - "8090:8088"
+    depends_on:
+      - superset-db
+      - superset-redis
+      - zookeeper # Adicionamos para garantir a ordem de inicialização
+    networks:
+      - hadoop_network
+    volumes:
+      - ./superset-conf/superset_config.py:/app/superset_config.py
+      - ./superset-conf/requirements.txt:/app/requirements-local.txt
+    environment:
+      
+      - POSTGRES_DB=superset
+      - CYPRESS_CONFIG="false"
+      #- DATABASE_DIALECT="postgres"
+      - SQLALCHEMY_DATABASE_URI=postgresql://superset:superset@superset-db:5432/superset
+      - SUPERSET_SECRET_KEY=uma_chave_secreta_super_longa_e_aleatoria
+      - CACHE_CONFIG_CACHE_TYPE=redis
+      - CACHE_CONFIG_CACHE_REDIS_URL=redis://superset-redis:6379/0
+      - SUPERSET_CONFIG_PATH=/app/superset_config.py
 
 volumes:
   hadoop_namenode:
   hadoop_datanode:
   pg_metastore_data:
   mysql_data:
+  n8n_data:
+  superset_db_data:
+  superset_redis_data:
 networks:
   hadoop_network:
-
-  # https://hub.docker.com/r/gradiant/hbase-region
-  # https://hub.docker.com/r/elek/hbase-regionserver
+  
