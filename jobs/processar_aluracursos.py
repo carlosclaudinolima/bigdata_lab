@@ -1,5 +1,12 @@
 from pyspark.sql import SparkSession
 
+# -- Este Job Spark faz realiza as seguintes tarefas:
+# -- 1. Extrai os dados de cursos da Alura da camada raw
+# -- 2. Faz a transformação na coluna
+# -- 3. Carrega os dados processados na camada processed, registrando os metadados no Hive
+# -- como tabela externa, para que possam ser acessados via consultas ao hive server
+# -- por outras ferramentas, como por exemplo usando o BeeLine ou até mesmo pelo próprio spark.
+
 def main():
     spark = (
         SparkSession.builder.appName("ProcessarAluraCursos")

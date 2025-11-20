@@ -1,6 +1,8 @@
 import requests
 from pyspark.sql import SparkSession
 
+# -- Este Job faz a ingestão dos dados da API pública da Alura na camada raw do Datalake
+
 def main():
     spark = (
         SparkSession.builder.appName("IngerirAluraCursos")
